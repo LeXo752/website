@@ -51,90 +51,16 @@ const all = (sql, params = []) =>
     });
   });
 
-app.use(express.json());
 app.use(express.static(PUBLIC_DIR));
 
 app.get('/', (_req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
 
-app.post('/api/prices', async (req, res) => {
-  const body = req.body || {};
-  const rawSymbol = typeof body.symbol === 'string' ? body.symbol.trim() : '';
-  const rawCurrency = typeof body.currency === 'string' ? body.currency.trim() : '';
-  const symbol = rawSymbol.toUpperCase();
-
-  if (!symbol) {
     res.status(400).json({ error: 'Symbol erforderlich.' });
     return;
   }
 
-  const price = Number(body.price);
-  if (!Number.isFinite(price)) {
-    res.status(400).json({ error: 'Preis muss eine Zahl sein.' });
-    return;
-  }
-
-  let timestamp = null;
-  if (body.fetchedAt) {
-    const parsed = new Date(body.fetchedAt);
-    if (Number.isNaN(parsed.getTime())) {
-      res.status(400).json({ error: 'fetchedAt ist kein gültiges Datum.' });
-      return;
-    }
-    timestamp = parsed.toISOString();
-  }
-
-  const currency = rawCurrency ? rawCurrency.toUpperCase() : null;
-
-  try {
-    const params = timestamp
-      ? [symbol, price, currency, timestamp]
-      : [symbol, price, currency];
-    const placeholders = timestamp
-      ? '(symbol, price, currency, fetched_at) VALUES (?, ?, ?, ?)' 
-      : '(symbol, price, currency) VALUES (?, ?, ?)';
-
-    const result = await run(
-      `INSERT INTO prices ${placeholders}`,
-      params
-    );
-
-    const rows = await all(
-      `SELECT id, symbol, price, currency, fetched_at
-         FROM prices
-        WHERE id = ?`,
-      [result.lastID]
-    );
-
-    const entry = rows[0];
-
-    res.status(201).json({
-      message: 'Kurs gespeichert.',
-      entry: entry && {
-        id: entry.id,
-        symbol: entry.symbol,
-        price: entry.price,
-        currency: entry.currency,
-        fetchedAt: entry.fetched_at,
-      },
-    });
-  } catch (error) {
-    console.error('Fehler beim Speichern des Kurses:', error);
-    res.status(500).json({ error: 'Kurs konnte nicht gespeichert werden.' });
-  }
-});
-
-app.get('/api/quote', async (req, res) => {
-  const rawSymbol = (req.query.symbol || '').trim();
-  if (!rawSymbol) {
-    res.status(400).json({ error: 'Symbol erforderlich.' });
-    return;
-  }
-
-  const symbol = rawSymbol.toUpperCase();
-
-  try {
     const historyRows = await all(
       `SELECT symbol, price, currency, fetched_at
          FROM prices
@@ -144,18 +70,7 @@ app.get('/api/quote', async (req, res) => {
       [symbol]
     );
 
-    if (!historyRows.length) {
-      res.status(404).json({ error: `Für ${symbol} wurden noch keine Kurse gespeichert.` });
-      return;
-    }
 
-    const latest = historyRows[0];
-
-    res.json({
-      symbol,
-      price: latest.price,
-      currency: latest.currency,
-      fetchedAt: latest.fetched_at,
       history: historyRows.map((row) => ({
         symbol: row.symbol,
         price: row.price,
@@ -164,8 +79,6 @@ app.get('/api/quote', async (req, res) => {
       })),
     });
   } catch (error) {
-    console.error('Fehler beim Laden des Kurswerts:', error);
-    res.status(500).json({ error: 'Datenbankfehler beim Laden des Kurswerts.' });
   }
 });
 
