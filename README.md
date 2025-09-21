@@ -56,3 +56,28 @@ bearbeiten und eigene Datensätze in die Tabelle `prices` einfügen.
 - `GET /api/quote?symbol=AAPL` – liefert den letzten gespeicherten Kurs sowie
   bis zu 20 historische Werte.
 - `GET /api/history?symbol=AAPL` – gibt bis zu 100 gespeicherte Kurswerte zurück.
+
+## Beispiel-Testdaten
+Im Ordner `data/` liegt die Datei [`test-prices.json`](data/test-prices.json) mit
+mehreren Kursen für AAPL, MSFT, TSLA, SAP und Adidas. Damit kannst du die
+Oberfläche ohne eigenen Datenbestand ausprobieren.
+
+### Laden per Skript
+1. Starte den Server (`npm start`).
+2. Importiere die Beispieldaten in einem zweiten Terminal:
+
+   ```bash
+   node scripts/import-prices.js
+   ```
+
+   Der Import verwendet standardmäßig `data/test-prices.json` und sendet jeden
+   Eintrag an `http://localhost:3000/api/prices`.
+
+Optional kannst du eine andere Datei oder Basis-URL übergeben:
+
+```bash
+node scripts/import-prices.js path/zur/datei.json http://localhost:4000
+```
+
+Das Skript prüft jedes Objekt und bricht bei Fehlern mit einer verständlichen
+Fehlermeldung ab.

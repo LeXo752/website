@@ -1,0 +1,62 @@
+[
+  {
+    "symbol": "AAPL",
+    "price": 189.32,
+    "currency": "USD",
+    "fetchedAt": "2024-05-17T15:30:00Z"
+  },
+  {
+    "symbol": "AAPL",
+    "price": 190.16,
+    "currency": "USD",
+    "fetchedAt": "2024-05-16T15:30:00Z"
+  },
+  {
+    "symbol": "AAPL",
+    "price": 187.78,
+    "currency": "USD",
+    "fetchedAt": "2024-05-15T15:30:00Z"
+  },
+  {
+    "symbol": "MSFT",
+    "price": 414.67,
+    "currency": "USD",
+    "fetchedAt": "2024-05-17T15:30:00Z"
+  },
+  {
+    "symbol": "MSFT",
+    "price": 412.45,
+    "currency": "USD",
+    "fetchedAt": "2024-05-16T15:30:00Z"
+  },
+  {
+    "symbol": "TSLA",
+    "price": 176.89,
+    "currency": "USD",
+    "fetchedAt": "2024-05-17T15:30:00Z"
+  },
+  {
+    "symbol": "TSLA",
+    "price": 173.85,
+    "currency": "USD",
+    "fetchedAt": "2024-05-16T15:30:00Z"
+  },
+  {
+    "symbol": "SAP",
+    "price": 171.52,
+    "currency": "EUR",
+    "fetchedAt": "2024-05-17T15:30:00Z"
+  },
+  {
+    "symbol": "SAP",
+    "price": 169.44,
+    "currency": "EUR",
+    "fetchedAt": "2024-05-16T15:30:00Z"
+  },
+  {
+    "symbol": "ADS",
+    "price": 198.33,
+    "currency": "EUR",
+    "fetchedAt": "2024-05-17T15:30:00Z"
+  }
+]
