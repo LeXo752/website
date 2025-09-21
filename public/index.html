@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aktienpreise</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="top">
+      <h1>Aktienpreise</h1>
+      <button id="theme-toggle" type="button" aria-label="Design wechseln">☀️</button>
+    </header>
+    <main>
+      <p class="subtitle">
+        Suche nach einem Börsenticker und zeige die Kurse an, die du zuvor in deiner
+        lokalen Datenbank gespeichert hast.
+      </p>
+      <form id="stock-form">
+        <input
+          type="text"
+          id="symbol"
+          placeholder="Symbol (z.&nbsp;B. AAPL)"
+          autocomplete="off"
+          required
+        />
+        <button type="submit">Suche</button>
+      </form>
+      <div id="result" aria-live="polite"></div>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
