@@ -9,19 +9,24 @@
   <body>
     <header class="top">
       <h1>Aktienpreise</h1>
-      <button id="theme-toggle" aria-label="Design wechseln">☀️</button>
+      <button id="theme-toggle" type="button" aria-label="Design wechseln">☀️</button>
     </header>
     <main>
+      <p class="subtitle">
+        Suche nach einem Börsenticker und speichere automatisch jeden Kurs in deiner
+        lokalen Datenbank.
+      </p>
       <form id="stock-form">
         <input
           type="text"
           id="symbol"
-          placeholder="Symbol (z.B. AAPL)"
+          placeholder="Symbol (z.&nbsp;B. AAPL)"
+          autocomplete="off"
           required
         />
         <button type="submit">Suche</button>
       </form>
-      <div id="result"></div>
+      <div id="result" aria-live="polite"></div>
     </main>
     <script src="script.js"></script>
   </body>
