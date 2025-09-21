@@ -57,40 +57,9 @@ app.get('/', (_req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
 
-app.get('/api/quote', async (req, res) => {
-  const rawSymbol = (req.query.symbol || '').trim();
-  if (!rawSymbol) {
     res.status(400).json({ error: 'Symbol erforderlich.' });
     return;
   }
-
-  const symbol = rawSymbol.toUpperCase();
-
-  try {
-    const response = await fetch(
-      `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbol)}`
-    );
-
-    if (!response.ok) {
-      throw new Error(`Yahoo Finance antwortete mit Status ${response.status}`);
-    }
-
-    const data = await response.json();
-    const quote = data?.quoteResponse?.result?.[0];
-
-    if (!quote || typeof quote.regularMarketPrice !== 'number') {
-      res.status(404).json({ error: `Kein Kurs für ${symbol} gefunden.` });
-      return;
-    }
-
-    const price = quote.regularMarketPrice;
-    const currency = quote.currency || 'USD';
-
-    await run(
-      `INSERT INTO prices (symbol, price, currency)
-       VALUES (?, ?, ?)`,
-      [symbol, price, currency]
-    );
 
     const historyRows = await all(
       `SELECT symbol, price, currency, fetched_at
@@ -101,11 +70,7 @@ app.get('/api/quote', async (req, res) => {
       [symbol]
     );
 
-    res.json({
-      symbol,
-      price,
-      currency,
-      fetchedAt: historyRows[0]?.fetched_at || new Date().toISOString(),
+
       history: historyRows.map((row) => ({
         symbol: row.symbol,
         price: row.price,
@@ -114,10 +79,6 @@ app.get('/api/quote', async (req, res) => {
       })),
     });
   } catch (error) {
-    console.error('Fehler beim Abrufen des Kurswerts:', error);
-    res
-      .status(502)
-      .json({ error: 'Abruf des Kurses fehlgeschlagen. Bitte später erneut versuchen.' });
   }
 });
 
